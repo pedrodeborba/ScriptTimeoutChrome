@@ -7,7 +7,7 @@ def is_chrome_open():
     """
     Verifica se o Google Chrome está aberto.
     """
-    chrome_process = "chrome.exe"  # O nome do processo pode variar dependendo do sistema operacional
+    chrome_process = "chrome.exe"
     for proc in psutil.process_iter():
         if proc.name() == chrome_process:
             return True
@@ -20,8 +20,8 @@ def close_chrome():
     subprocess.run(["taskkill", "/F", "/IM", "chrome.exe"])
 
 def main():
-    # Defina o tempo limite de inatividade em segundos
-    timeout = 10
+    # Tempo limite de inatividade em segundos
+    timeout = 120 #2min
     timeout_counter = 0  # Inicialize timeout_counter
 
     print("Iniciando monitoramento de inatividade...")
@@ -36,18 +36,18 @@ def main():
 
             # Verificar se a posição do mouse mudou
             if pyautogui.position() != (x, y):
-                # O mouse se moveu, resete o contador de tempo
+                # O mouse se moveu... Reseta o contador de tempo
                 timeout_counter = 0
             else:
-                # O mouse não se moveu, incrementar o contador de tempo
+                # O mouse não se moveu... Incrementa o contador de tempo
                 timeout_counter += 1
 
-            # Verificar se o contador de tempo atingiu o tempo limite
+            # Verifica se o contador de tempo atingiu o tempo limite
             if timeout_counter >= timeout:
                 print("Inatividade detectada por mais de 2 minutos.")
-                # Verificar se o Google Chrome está aberto
+                # Verifica se o Google Chrome está aberto
                 if is_chrome_open():
-                    # Fechar o Google Chrome
+                    # Fecha o Google Chrome
                     print("Fechando o Google Chrome...")
                     close_chrome()
                     print("Google Chrome fechado após inatividade.")
@@ -55,8 +55,8 @@ def main():
                     print("Google Chrome não está aberto.")
                 break
 
-        # Aguardar por um período antes de começar a monitorar novamente
-        time.sleep(10)  # Aguarde 10 segundos antes de começar a monitorar novamente
+        # Aguarda por um período antes de começar a monitorar novamente
+        time.sleep(10)  # Aguarda 10 segundos antes de começar a monitorar novamente
 
 if __name__ == "__main__":
     main()
